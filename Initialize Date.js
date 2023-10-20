@@ -1,15 +1,23 @@
-// Initialize function to set date field
-function initializeDateField() {
-  // Custom function to pad numbers with leading zeros
-  function padNumber(num) {
-    return (num < 10 ? '0' : '') + num;
+function setTodaysDate() {
+  // List of date field names
+  var dateFieldNames = ["Date1_af_date"];
+  
+  // Get the first date field to check if it's populated
+  var firstField = this.getField(dateFieldNames[0]);
+  
+  // If the date field is already populated, exit the function
+  if (firstField.value != "") {
+    return;
   }
-
-  // Get today's date
+  
+  // Otherwise, get today's date
   var today = new Date();
   
   // Get the day, month, and year
-  var day = padNumber(today.getDate());
+  var day = today.getDate();
+  if (day < 10) {
+    day = '0' + day;
+  }
   var year = today.getFullYear();
   
   // Get the month name and convert it to its three-letter abbreviation
@@ -19,13 +27,14 @@ function initializeDateField() {
   // Combine them to form the date in the format dd-mmm-yyyy
   var formattedDate = day + '-' + month + '-' + year;
   
-  // Set the date field if it's empty
-  var dateField = this.getField("Date1_af_date");
-  
-  if (dateField && !dateField.value) {
-    dateField.value = formattedDate;
+  // Loop through each field name and set its value
+  for (var i = 0; i < dateFieldNames.length; i++) {
+    var field = this.getField(dateFieldNames[i]);
+    if (field) {
+      field.value = formattedDate;
+    }
   }
 }
 
-// Call the initialize function when the document is opened
-initializeDateField();
+// Call the function when the document is opened
+setTodaysDate();
